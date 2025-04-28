@@ -1,4 +1,5 @@
 import tkinter as tk
+import uuid
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 
@@ -43,10 +44,25 @@ def deduplicate():
     tmp = str()
 
     for key in map:
-        tmp += key + "\n"
+        if is_valid_uuid(key):
+            tmp += key + "\n"
+        else:
+            print('not valid uuid: '+key)
 
     txt_edit.delete("1.0", tk.END)
     txt_edit.insert(tk.END, tmp)
+
+    f = open("result.csv", "a")
+    f.write(tmp)
+    f.close()
+
+def is_valid_uuid(value):
+    try:
+        uuid.UUID(str(value))
+
+        return True
+    except ValueError:
+        return False
 
 if __name__ == "__main__":
     main()
